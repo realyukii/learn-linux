@@ -1,6 +1,8 @@
 # Learn linux from DIY and RTFM principle
 
 ## Building and tuning your own linux system (simplified)
+<details>
+    <summary>expand</summary>
 
 The computer have several stage on booting process, the way to achieve or perform the operation are variant but the overall general stage are same:
 - System startup
@@ -203,3 +205,4 @@ df -h
 ### Question
 is it true that transfering the kernel [directly](https://tldp.org/HOWTO/Bootdisk-HOWTO/x703.html) without bootloader [no longer possible](https://superuser.com/questions/415429/how-to-boot-linux-kernel-without-bootloader)?
 
+</details>
