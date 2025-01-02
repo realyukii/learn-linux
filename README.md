@@ -2,7 +2,7 @@
 
 ## Building and tuning your own linux system (simplified)
 <details>
-    <summary>expand</summary>
+    <summary>click to expand</summary>
 
 The computer have several stage on booting process, the way to achieve or perform the operation are variant but the overall general stage are same:
 - System startup
