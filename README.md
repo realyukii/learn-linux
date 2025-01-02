@@ -1,5 +1,6 @@
-# A note on building simple linux system
-This repository is an expansion version of [this gist](https://gist.github.com/RealYukiSan/c69d9cc9120c1e5d7b5afcf371e3f79d)
+# Learn linux from DIY and RTFM principle
+
+## Building and tuning your own linux system (simplified)
 
 The computer have several stage on booting process, the way to achieve or perform the operation are variant but the overall general stage are same:
 - System startup
@@ -9,28 +10,28 @@ The computer have several stage on booting process, the way to achieve or perfor
 
 see the [wiki](https://en.wikipedia.org/wiki/Booting_process_of_Linux) for more information.
 
-## The requirement
+### The requirement
 - busybox for userspace program
 - latest stable linux Kernel
 - runnning linux operating system on the host
 - USB flash drive or QEMU
 
-## Partition layout and File system
+### Partition layout and File system
 - 200 MB for root filesystem with ext4 format
 
-## Outline
+### Outline
 1. Create disk image file instead of formatting physical drive
 2. Prepare the linux system on mounted drive
 3. Test the newly created linux system on QEMU emulator
 4. Transfer the newly created linux system to USB flash drive
 
-## Create the disk image 
+### Create the disk image 
 
 ```bash
 dd if=/dev/zero of=linux.img bs=200M count=1 status=progress
 ```
 
-### Setup partition
+Setup the partition layout
 
 enable boot flag and create a partition with whole disk image size.
 
@@ -65,7 +66,7 @@ in case you want to mount the image, mount the partition by specifying the offse
 sudo mount linux.img /mnt/newsystem -o loop,offset=$((512*2048))
 ```
 
-## Prepare the linux system
+### Prepare the linux system
 
 We'll populate the disk image with minimum requirement for building a linux system.
 
@@ -73,13 +74,13 @@ install the busybox, see the gist above.
 
 make sure the owner of `/mnt/newsystem` are root (though by default it's already root), because when chroot, the only user that available was `root`
 
-### Preparing directory for Virtual Kernel File Systems
+1. Creating directory for Virtual Kernel File Systems
 
 ```bash
 sudo mkdir -pv /mnt/newsystem/{dev/{shm,pts},proc,sys,run,tmp}
 ```
 
-### Preparing standard directory
+2. Creating standard directory
 
 ```bash
 sudo mkdir -pv /mnt/newsystem/{etc,home,root,boot/syslinux}
@@ -87,7 +88,7 @@ sudo mkdir -pv /mnt/newsystem/{etc,home,root,boot/syslinux}
 
 Bash is really cool and badass! You can create multiple directories in all sorts of ways, even with just a single line of code.
 
-### Configure the `/etc/fstab`
+3. Configure the `/etc/fstab`
 
 ```bash
 sudo tee /mnt/newsystem/etc/fstab << "EOF"
@@ -102,7 +103,7 @@ EOF
 
 add `mount -a` later in your init program?
 
-### Install the syslinux bootloader
+4. Install the syslinux bootloader
 
 ```bash
 extlinux -i /mnt/newsystem/boot/syslinux --device=/dev/loop<n>
@@ -116,7 +117,7 @@ dd bs=440 count=1 conv=notrunc if=/usr/lib/syslinux/bios/mbr.bin of=linux.img
 
 syslinux cannot be loaded without the bootstrapping code, see the [MBR bootstrap code creation](https://superuser.com/questions/1206396/mbr-bootstrap-code-creation) for further reading.
 
-### Configure syslinux
+4.1 Configure syslinux
 
 ```bash
 sudo tee /mnt/newsystem/boot/syslinux/extlinux.conf << "EOF"
@@ -144,7 +145,7 @@ cp -v ./bzImage /mnt/newsystem/boot
 
 the bootloader will loop forever if it can't find the kernel location XD
 
-## Run it on QEMU
+### Run it on QEMU
 
 ```bash
 qemu-system-x86_64 \
@@ -156,13 +157,13 @@ if you use `tigervnc`, remove the `-nographic` and `console` kernel parameter, o
 
 You also able to using physical device instead of disk image by `-hdb <device>` option
 
-## Misc
+### Miscellaneous
 
-### chrooted the disk image
+#### chrooted the disk image
 
 if you want to perform chroot, we need to prepare the virtual kernel file systems so the kernel will be able to communicate with the kernel itself, see the LFS chapter 7.3 for the rest of instruction.
 
-### make a backup using disk image format
+#### make a backup using disk image format
 
 transfer device to disk image file:
 
@@ -174,7 +175,7 @@ to mount, use offset to specify which partition to be mounted.
 
 you can also run the image on QEMU! if the disk img using partition, don't forget to use `/dev/sda1` instead of `/dev/sda` for `root` kernel parameter
 
-### Useful command for debugging
+#### Useful command for debugging
 
 ```bash
 findmnt -A
@@ -183,7 +184,7 @@ losetup -a
 df -h
 ```
 
-## Link and references
+### Link and references
 - [linuxfromscratch](https://www.linuxfromscratch.org/lfs/view/stable) - LFS Guide
 - [tldp](https://tldp.org/HOWTO/Bootdisk-HOWTO) - HOWTO create rescue disk
 - [wiki.archlinux](https://wiki.archlinux.org/title/Installation_guide) - installation guide
@@ -199,6 +200,6 @@ df -h
 - [joe-bergeron](https://www.joe-bergeron.com/posts/Writing%20a%20Tiny%20x86%20Bootloader/) - what is bootloader? tiny bootloader
 - [superuser](https://superuser.com/a/1297351/1867794) - auto-mount partition on loop back device
 
-## Question
+### Question
 is it true that transfering the kernel [directly](https://tldp.org/HOWTO/Bootdisk-HOWTO/x703.html) without bootloader [no longer possible](https://superuser.com/questions/415429/how-to-boot-linux-kernel-without-bootloader)?
 
