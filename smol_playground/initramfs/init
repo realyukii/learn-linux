@@ -22,6 +22,13 @@ mount -a
 mkdir -v /dev/pts
 mount -t devpts none /dev/pts
 
+# bring loop back interface up
+ip link set lo up
+
+# fix sshd error
+chown -R root:root /usr/share/empty.sshd
+ssh-keygen -A
+
 # Give the shell access to tty for enabling job control feature.
 ln -svf /dev/ttyS0 /dev/console
 setsid sh -c 'exec </dev/console >/dev/console 2>&1; exec /bin/sh'
