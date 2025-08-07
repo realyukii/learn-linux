@@ -1,0 +1,4 @@
+SshdSessionPath /portable/sshd-session
+SshdAuthPath /portable/sshd-auth
+PermitEmptyPasswords yes
+PermitRootLogin yes
