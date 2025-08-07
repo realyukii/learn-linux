@@ -206,3 +206,5 @@ df -h
 is it true that transfering the kernel [directly](https://tldp.org/HOWTO/Bootdisk-HOWTO/x703.html) without bootloader [no longer possible](https://superuser.com/questions/415429/how-to-boot-linux-kernel-without-bootloader)?
 
 </details>
+## Executable and Linkable Format
+ELF file is an executable program that can be run on linux
