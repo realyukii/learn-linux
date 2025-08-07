@@ -1,0 +1,16 @@
+A demonstration on how to run Linux kernel in QEMU with busybox as its
+user-space applications.
+
+Pre-requisites:
+- pre-compiled Linux kernel inside `smol_playground`
+- pre-compiled statically-linked busybox
+- kernel module `9pnet_virtio` (optional for host-guest shared directory)
+
+You MUST bootstrap the `smol_playground/initramfs` by installing busybox into it.
+
+Since we use custom `init` file, you can safely remove `linuxrc` that get 
+generated after installing busybox.
+
+Install the `9pnet_virtio` kernel module into `initramfs/lib/modules/$(uname -r)/`.
+
+After everything has been set up, you can simply run `./start_vm.sh`.

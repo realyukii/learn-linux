@@ -1,0 +1,25 @@
+References:
+Support for host and guest shared folder:
+- https://www.kernel.org/doc/html/latest/filesystems/9p.html
+- https://superuser.com/questions/628169/how-to-share-a-directory-with-the-host-without-networking-in-qemu
+
+LD_TRACE_LOADED_OBJECTS is a ldd alternative for inspecting shared object
+dependencies of dynamically-linked executable file or other shared object:
+- https://www.joshmcguigan.com/blog/ldd/
+
+Linux kernel source code in git repository:
+- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+Busybox source code in git repository:
+- https://git.busybox.net/busybox.git
+
+Current busybox compilation issue can be solved by disable CONFIG_TC 
+in `.config` file:
+- https://forum.beagleboard.org/t/errors-during-busybox-compilation/38969/6
+
+`modprobe` provided by busybox seems to expect kernel module file in 
+decompressed form.
+
+Shared folder require `CONFIG_NET_9P_VIRTIO=1` in `/proc/config.gz`, this
+can be satisfied by loading `9pnet_virtio` kernel module.
+
