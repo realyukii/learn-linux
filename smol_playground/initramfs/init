@@ -19,6 +19,8 @@ export PATH="$PATH:/portable"
 
 # You may need to adjust /etc/fstab to suit your needs.
 mount -a
+mkdir -v /dev/pts
+mount -t devpts none /dev/pts
 
 # Give the shell access to tty for enabling job control feature.
 ln -svf /dev/ttyS0 /dev/console

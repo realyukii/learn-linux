@@ -32,6 +32,7 @@ done
 
 kernel_ver=`file -bL ./$kernel_file | sed 's/.*version //;s/ .*//'`
 mkdir -pv "./initramfs/lib/modules/$kernel_ver"
+mkdir -pv ./initramfs/usr/{share/empty.sshd,lib/ssh}
 
 if [ ! -f "./$initrd_file" ]; then
 	echo "[+] generating $initrd_file"
