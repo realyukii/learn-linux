@@ -1,0 +1,4 @@
+none	/dev			devtmpfs	defaults
+none	/sys			sysfs		defaults
+none	/sys/kernel/tracing	tracefs		defaults
+none	/proc			proc		defaults

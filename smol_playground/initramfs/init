@@ -1,0 +1,26 @@
+#!/bin/sh
+
+kernel_release=`uname -r`
+# Enable shared folder feature, you may need to import the relevant *.ko 
+# files from the host.
+if [ -f "/lib/modules/$kernel_release/9p.ko" ]; then
+	modprobe 9p
+	modprobe 9pnet_virtio
+
+	mount -t 9p host0 /portable -o trans=virtio,version=9p2000.L
+else
+	echo "File sharing is unsupported in the system, please install 9p kernel module."
+fi
+
+# I use /portable as mount point of shared folder to share executable files
+# from host and import required dependencies with statifies.sh script.
+export LD_LIBRARY_PATH=/portable/lib
+export PATH="$PATH:/portable"
+
+# You may need to adjust /etc/fstab to suit your needs.
+mount -a
+
+# Give the shell access to tty for enabling job control feature.
+ln -svf /dev/ttyS0 /dev/console
+setsid sh -c 'exec </dev/console >/dev/console 2>&1; exec /bin/sh'
+
