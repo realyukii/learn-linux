@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 kernel_file="vmlinuz-linux"
-boot_file="boot.img"
 initrd_file="init.cpio"
 
 if [ -z ${shared_dir+x} ]; then
@@ -19,12 +18,6 @@ if [ ! -d "./initramfs/bin/" ]; then
 	exit
 fi
 
-if [ ! -f "./$boot_file" ]; then
-	dd if=/dev/zero of="./$boot_file" bs=200K count=1 status=progress
-	mkfs -t fat "./$boot_file"
-	syslinux -i "./$boot_file"
-fi
-
 dirs=(dev portable proc root sys)
 for dir in "${dirs[@]}"; do
     mkdir -pv "./initramfs/$dir"
@@ -40,7 +33,6 @@ if [ ! -f "./$initrd_file" ]; then
 fi
 
 qemu-system-x86_64 \
-	-drive format=raw,file="./$boot_file" \
 	-initrd "./$initrd_file" \
 	-kernel "./$kernel_file" -append "root=/ console=ttyS0" \
 	-m 2G -nographic -enable-kvm \
